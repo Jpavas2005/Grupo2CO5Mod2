@@ -1,47 +1,29 @@
-<<<<<<< Updated upstream
 import random
-import time
 from game.components.enemies.enemy import Enemy
-from game.utils.constants import ENEMY_1
+
 
 class EnemyManager:
     def __init__(self):
         self.enemies = []
-        self.last_enemy_time = time.time()
-=======
-from game.components.enemies.enemy import Enemy
 
-
-class EnemyManager:
-    def __init__(self):
-        self.Enemy = []
-
->>>>>>> Stashed changes
-        
-    def update(self):
+    def update (self, game):
         self.add_enemy()
         for enemy in self.enemies:
-            enemy.update(self.enemies)
-            
-<<<<<<< Updated upstream
-=======
-        
-    
->>>>>>> Stashed changes
-    def draw(self, screen):
+            enemy.update(self.enemies, game)
+
+    def draw (self, screen):
         for enemy in self.enemies:
             enemy.draw(screen)
-            
+
     def add_enemy(self):
-<<<<<<< Updated upstream
-        
-        if len(self.enemies) < 1 or time.time() - self.last_enemy_time >= 2:
-            self.SPEED_Y = random.randint(1,5)
-            self.SPEED_X = random.randint(1,8)
-            enemy = Enemy(self.SPEED_Y,self.SPEED_X)
+        enemy_type = random.randint(1,2)
+        if enemy_type ==1:
+            enemy = Enemy()
+        else:
+            x_speed = 5
+            y_speed = 2
+            move_x_for = [50, 120]
+            enemy = Enemy(enemy_type, x_speed, y_speed, move_x_for)
+
+        if len(self.enemies) < 1:
             self.enemies.append(enemy)
-            self.last_enemy_time = time.time()
-=======
-        enemy = Enemy()
-        self.enemies.append(enemy)
->>>>>>> Stashed changes
