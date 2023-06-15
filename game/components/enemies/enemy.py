@@ -25,7 +25,7 @@ class Enemy(Sprite):
         self.move_x_for = random.randint(30, 200)
         self.index = 0
         self.type = 'enemy'
-        self.shooting_time = random.randint(30,50)
+        self.shooting_time = random.randint(30, 50)
 
     def update(self, ships, game):
         self.rect.y += self.speed_y
@@ -38,8 +38,8 @@ class Enemy(Sprite):
             self.change_movement_x()
 
         if self.rect.y >= SCREEN_HEIGHT:
-            self.rect.y -= SCREEN_HEIGHT
-            #ships.remove(self)
+            #self.rect.y -= SCREEN_HEIGHT
+            ships.remove(self)
 
     def draw(self, screen):
         screen.blit(self.image, (self.rect.x, self.rect.y))
