@@ -1,7 +1,10 @@
+import pygame
+
 import random
 import time
+
 from game.components.enemies.enemy import Enemy
-from game.utils.constants import ENEMY_1, ENEMY_2, SCREEN_HEIGHT, SCREEN_WIDTH
+from game.utils.constants import ENEMY_1, ENEMY_2, SCREEN_HEIGHT, SCREEN_WIDTH, SOUND_EXPLOSION
 class EnemyManager:
     def __init__(self):
         self.enemies = []
@@ -27,7 +30,14 @@ class EnemyManager:
             enemy = Enemy(self.IMAGE_ENEMY[random.randint(0, 1)], speed_x, speed_y)
             self.enemies.append(enemy)
             self.last_enemy_time = time.time()
-    def destroyEnemy(self, bullet):
+
+    def destroyEnemy(self, bullet, game):
         for enemy in self.enemies:
             if enemy.rect.colliderect(bullet.rect):
                 self.enemies.remove(enemy)
+                explosion= pygame.mixer.Sound(SOUND_EXPLOSION)
+                pygame.mixer.Sound.play(explosion)
+                score = game.scoremanager.update_score()
+                game.scoremanager.scorelist(score)
+                return True
+
