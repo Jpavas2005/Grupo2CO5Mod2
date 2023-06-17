@@ -23,6 +23,7 @@ class Game:
         self.player = Spaceship()
         self.enemy_manager = EnemyManager()
         self.bullet_manager = BulletManager()
+        self.power_up_manager = PowerUpManager()
         self.menu = Menu('Prees Any Key to Start....', self.screen)
         self.running = False
         self.scoremanager = ScoreManager()
@@ -54,6 +55,7 @@ class Game:
         self.enemy_manager.update(self)
         self.bullet_manager.update(self, self.enemy_manager)
         self.player.update(user_input, self.bullet_manager)
+        self.power_up_manager.update(self)
 
 
     def draw(self):
@@ -63,7 +65,9 @@ class Game:
         self.player.draw(self.screen)
         self.enemy_manager.draw(self.screen)
         self.bullet_manager.draw(self.screen)
+        self.power_up_manager.draw(self.screen)
         self.draw_score()
+        self.draw_power_up_time()
         pygame.display.update()
         #pygame.display.flip()
 
@@ -97,3 +101,23 @@ class Game:
         text_rect = text.get_rect()
         text_rect.center = (1000, 50)
         self.screen.blit(text, text_rect)
+        
+    
+    def draw_power_up_time(self):
+        font = pygame.font.Font(FONT_STYLE, 30)
+        if self.player.has_power_up:
+            time_to_show = round(self.player.powee_timw_up - pygame.time.get_ticks()/1000,2)
+            
+            if time_to_show >=0:
+                font = pygame.font.Font(FONT_STYLE, 30)
+                text = font.render(f'Power Up Time: {self.power_up_manager.power_up_time}', True, (255, 255, 255))
+                text_rect = text.get_rect()
+                #text_rect.center = (1000, 50)
+                self.screen.blit(text, text_rect)
+            else:
+                self.player.has_power_up = False
+                self.power_up_manager.power_up_time = 0
+                self.player.set_image()
+                
+        
+        
