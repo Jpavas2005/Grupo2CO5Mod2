@@ -1,42 +1,63 @@
 import random
-
 import pygame
 
+from game.utils.constants import SPACESHIP_SHIELD, SHIELD_TYPE
+from game.components.power_ups.shield import Shield
+from game.components.power_ups.heart import Heart
+from game.components.power_ups.misile import Misile
 
-class PowerUpManager:
+
+class PowerUpManager():
+    MIN_TIME_POWER_UP = 5000
+    MAX_TIME_POWER_UP = 10000
+
     def __init__(self):
         self.power_ups = []
-        self.duration = random.randint(3,6)
-        self.when_appears = random.randint(5000, 10000)
+        self.when_appers = random.randint(self.MIN_TIME_POWER_UP, self.MAX_TIME_POWER_UP)
+        self.duration = random.randint(3, 5)
         
         
-    
-    
+
+    def generate_power_up(self):
+        power_up = Shield()
+        heart = Heart()
+        misile = Misile()
+        self.when_appers += random.randint(self.MIN_TIME_POWER_UP, self.MAX_TIME_POWER_UP)
+        self.power_ups.append(power_up)
+        self.power_ups.append(heart)
+        self.power_ups.append(misile)
+        
+        
+
     def update(self, game):
         current_time = pygame.time.get_ticks()
-        
-        if len(self.power_ups) == 0 and current_time >= self.self.when_appears:
+        if len(self.power_ups) == 0 and current_time >= self.when_appers:
             self.generate_power_up()
-            
+
         for power_up in self.power_ups:
-            power_up.update(game.speed, self.power_ups)
-            
-            if game.player.rect.colliderect(power_up.rect):
+            power_up.update(game.game_speed, self.power_ups)
+            if game.player.rect.colliderect(power_up):
                 power_up.start_time = pygame.time.get_ticks()
                 game.player.power_up_type = power_up.type
                 game.player.has_power_up = True
                 game.player.power_time_up = power_up.start_time + (self.duration * 1000)
-                game.player.set_image((65,75), SPACESHIP_SHIELD)
-                self.power_ups.remove(power_up)
+                game.player.set_image((65, 75), SPACESHIP_SHIELD)
+                if game.player.power_up_type == SHIELD_TYPE:
+                    game.player.set_image((65, 75),SPACESHIP_SHIELD)
+                    self.power_ups = []
+                elif game.player.power_up_type == "Heart":
+                    game.player.lives += 1
+                elif game.player.power_up_type == "Misile":
+                    game.enemy_manager.enemies = []
+                    self.power_ups = []
+                    #self.power_ups.remove(power_up)
+                
                 
     def draw(self, screen):
         for power_up in self.power_ups:
             power_up.draw(screen)
-    
-    def generate_power_up(self):
-        power_up = Shield()
-        self.when_appears +=  random.randint(5000, 10000)
-        self.power_ups.appeend(power_up)
-        
-        
-        
+
+    def reset(self):
+        power_up = []
+        now = pygame.time.get_ticks()
+        self.when_appers = random.randint(now + self.MIN_TIME_POWER_UP, self.MAX_TIME_POWER_UP)

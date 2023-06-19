@@ -39,11 +39,13 @@ class Enemy(Sprite):
             self.change_movement_x()
 
         if self.rect.y >= SCREEN_HEIGHT:
-            #self.rect.y -= SCREEN_HEIGHT
-            ships.remove(self)
+            self.rect.y -= SCREEN_HEIGHT
+            #ships.remove(self)
 
     def draw(self, screen):
         screen.blit(self.image, (self.rect.x, self.rect.y))
+
+
 
     def change_movement_x(self):
         self.index += 1
@@ -60,3 +62,4 @@ class Enemy(Sprite):
             bullet = Bullet(self)
             bullet_manager.add_bullet(bullet)
             self.shooting_time += random.randint(30, 50)
+

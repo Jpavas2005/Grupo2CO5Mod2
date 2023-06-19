@@ -4,12 +4,12 @@ from game.utils.constants import FONT_STYLE, SCREEN_WIDTH, SCREEN_HEIGHT
 class Menu:
     HALF_SCREEN_WIDTH = SCREEN_WIDTH // 2
     HALF_SCREEN_HEIGHT = SCREEN_HEIGHT // 2
-    def __init__(self, message, screen):
+    def __init__(self, screen):
         screen.fill((255, 255, 255))
         self.font = pygame.font.Font(FONT_STYLE, 30)
-        self.text = self.font.render(message, True, (0, 0, 0))
-        self.text_rect = self.text.get_rect()
-        self.text_rect.center = (self.HALF_SCREEN_WIDTH, self.HALF_SCREEN_HEIGHT)
+        #self.text = self.font.render(message, True, (0, 0, 0))
+        #self.text_rect = self.text.get_rect()
+        #self.text_rect.center = (self.HALF_SCREEN_WIDTH, self.HALF_SCREEN_HEIGHT)
         self.actualscreen = False
         self.score = 0
         self.highscore = 0
@@ -19,12 +19,12 @@ class Menu:
         pygame.display.update()
         self.handle_events_on_menu(game)
 
-    def draw(self, screen):
-        screen.blit(self.text, self.text_rect)
-        if self.actualscreen:
-            screen.blit(self.score, self.text_rect2)
-            screen.blit(self.highscore, self.text_rect3)
-            screen.blit(self.deaths, self.text_rect4)
+    def draw(self, screen, message, x = HALF_SCREEN_WIDTH, y = HALF_SCREEN_HEIGHT, color = (0, 0, 0)):
+        #screen.blit(self.text, self.text_rect)
+        text = self.font.render(message, True, color)
+        text_rect = text.get_rect()
+        text_rect.center = (x, y)
+        screen.blit(text, text_rect)
 
 
     def handle_events_on_menu(self, game):
@@ -42,7 +42,7 @@ class Menu:
         self.text_rect = self.text.get_rect()
         self.text_rect.center = (self.HALF_SCREEN_WIDTH + 20, self.HALF_SCREEN_HEIGHT)
 
-    def show_scores(self, score, highscore, deaths):
+    """def show_scores(self, score, highscore, deaths):
         self.score = self.font.render("Your score: " + score, True, (0, 0, 0))
         self.text_rect2 = self.score.get_rect()
         self.text_rect2.center = (self.HALF_SCREEN_WIDTH, self.HALF_SCREEN_HEIGHT + 50)
@@ -53,6 +53,6 @@ class Menu:
 
         self.deaths = self.font.render("Total deaths: " + deaths, True, (0, 0, 0))
         self.text_rect4 = self.score.get_rect()
-        self.text_rect4.center = (self.HALF_SCREEN_WIDTH, self.HALF_SCREEN_HEIGHT + 150)
+        self.text_rect4.center = (self.HALF_SCREEN_WIDTH, self.HALF_SCREEN_HEIGHT + 150)"""
 
 
