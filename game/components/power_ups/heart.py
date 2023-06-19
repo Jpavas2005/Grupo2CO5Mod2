@@ -6,4 +6,4 @@ class Heart(PowerUp):
     def __init__(self):
         self.size = (70, 70)
         self.image = pygame.transform.scale(HEART, self.size)
-        super().__init__(self.image, type="heart")
+        super().__init__(self.image, type="Heart")

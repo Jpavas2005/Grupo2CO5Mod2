@@ -1,9 +1,9 @@
 import random
-import pygame
+import pygame, pygame.mixer
 import time
 from pygame.sprite import Sprite
 from game.components.bullets.bullet import Bullet
-from game.utils.constants import ENEMY_1, ENEMY_2, SCREEN_HEIGHT, SCREEN_WIDTH
+from game.utils.constants import ENEMY_1, ENEMY_2, SCREEN_HEIGHT, SCREEN_WIDTH,SOUND_BULLET
 
 class Enemy(Sprite):
     ENEMY_WIDTH = 40
@@ -26,7 +26,11 @@ class Enemy(Sprite):
         self.move_x_for = random.randint(30, 200)
         self.index = 0
         self.type = 'enemy'
-        self.shooting_time = random.randint(30, 50)
+        self.shooting_time = 50 #random.randint(30, 50)
+        self.shoot_delay = 250
+        self.last_shot =pygame.time.get_ticks()
+        self.shooting_time = pygame.time.get_ticks() + 500
+        self.shoot_num = 0
 
     def update(self, ships, game):
         self.rect.y += self.speed_y
@@ -45,8 +49,6 @@ class Enemy(Sprite):
     def draw(self, screen):
         screen.blit(self.image, (self.rect.x, self.rect.y))
 
-
-
     def change_movement_x(self):
         self.index += 1
         if (self.index >= self.move_x_for and self.movement_x == 'right') or (self.rect.x >= SCREEN_WIDTH - self.ENEMY_WIDTH):
@@ -55,11 +57,15 @@ class Enemy(Sprite):
         elif (self.index >= self.move_x_for and  self.movement_x == 'left') or (self.rect.x <= 10):
             self.movement_x = 'right'
             self.index = 0
-
+    
     def shoot(self, bullet_manager):
         current_time = pygame.time.get_ticks()
-        if self.shooting_time <= current_time:
+        round_time = round((self.shooting_time - pygame.time.get_ticks())/1000)
+        if round_time <= 0:
             bullet = Bullet(self)
             bullet_manager.add_bullet(bullet)
-            self.shooting_time += random.randint(30, 50)
-
+            self.shoot_num += 1
+            self.shooting_time = pygame.time.get_ticks()+2000
+            bullet = pygame.mixer.Sound(SOUND_BULLET)
+            pygame.mixer.Sound.play(bullet)
+            pygame.mixer.music.set_volume(0.2)
